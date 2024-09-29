@@ -65,36 +65,3 @@ class DBClient {
 const dBClient = new DBClient();
 
 export default dBClient;
-
-const waitConnection = () => {
-    return new Promise((resolve, reject) => {
-        let i = 0;
-        const repeatFct = async () => {
-            await new Promise((res) => setTimeout(res, 1000));  // Using Promise for setTimeout
-            i += 1;
-            if (i >= 10) {
-                reject(new Error('Connection timed out'));
-            } else if (!dBClient.isAlive()) {
-                repeatFct();
-            } else {
-                resolve();
-            }
-        };
-        repeatFct();
-    });
-};
-
-(async () => {
-    try {
-        console.log(dBClient.isAlive());
-        await dBClient.connect(); // Ensure connection is established
-        await waitConnection();
-        console.log(dBClient.isAlive());
-        console.log(await dBClient.nbUsers());
-        console.log(await dBClient.nbFiles());
-    } catch (error) {
-        console.error('Error during database operations:', error);
-    } finally {
-        await dBClient.close();  // Ensure the connection is closed
-    }
-})();
