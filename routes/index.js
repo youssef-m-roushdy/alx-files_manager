@@ -1,6 +1,8 @@
-const express = require('express');
-const router = express.Router();
 import AppController from '../controllers/AppController';
+
+const express = require('express');
+
+const router = express.Router();
 
 // Define routes
 router.get('/status', AppController.getStatus);
